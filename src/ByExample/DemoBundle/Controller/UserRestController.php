@@ -124,12 +124,12 @@ class UserRestController extends Controller
      */
     public function putUserAction($slug)
     {
+        $view = FOSView::create();
         $request = $this->getRequest();
         $userManager = $this->container->get('fos_user.user_manager');
 
         $user = $userManager->findUserByUsernameOrEmail($slug);
         if (!$user) {
-            $view = FOSView::create();
             $view->setStatusCode(204);
             return $view;
         }
@@ -148,7 +148,6 @@ class UserRestController extends Controller
         $errors = $validator->validate($user, array('Registration'));
         if (count($errors) == 0) {
             $userManager->updateUser($user);
-            $view = FOSView::create();
             $view->setStatusCode(204);
         } else {
             $view = $this->get_errors_view($errors);
